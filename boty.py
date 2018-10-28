@@ -14,13 +14,13 @@ import json
 from opencage.geocoder import OpenCageGeocode
 import sqlite3
 # conn = sqlite3.connect('sqlite:///E:\\New projectsss\\New-project\\main_db.db')
-# conn = sqlite3.connect('main_db.db')
-# cur = conn.cursor()
+conn = sqlite3.connect('main_db.db')
+cur = conn.cursor()
 
-key = 'e3c8adb1ab764f26984c401d12a5a908'
+key = 'a279f5ab7cc1464da34cec0183dde7a0'
 geocoder = OpenCageGeocode(key)
 
-query = "Lviv";
+query = "Lviv"
 result = geocoder.geocode(query)
 if result and len(result):
         longitude = result[0]['geometry']['lng']
@@ -47,13 +47,6 @@ def on_chat_message(msg):
             ])
             # bot.sendMessage(chat_id, "", parse_mode='HTML')
             bot.sendMessage(chat_id, '*Hi*', reply_markup=markup, parse_mode='Markdown')
-    if command =='Current Weather':
-        conn = sqlite3.connect('main_db.db')
-        cur = conn.cursor()
-        com_sql = "INSERT OR REPLACE INTO commands (user_id, location) VALUES (?, ?)"
-        cur.execute(com_sql, (msg['from']['id'], '1'))
-        conn.commit()
-        bot.sendMessage(chat_id, 'Write your location')
     conn = sqlite3.connect('main_db.db')
     cur = conn.cursor()
     # cur.execute("SELECT EXISTS(SELECT * FROM commands WHERE user_id=msg['from']['id'])")
@@ -61,7 +54,23 @@ def on_chat_message(msg):
     result = cur.fetchall()
     print(result)
     if result == [(1,)]:
-        print(21)
+        print(command)
+        query=command
+        result = geocoder.geocode(query)
+        longitude = result[0]['geometry']['lng']
+        latitude  = result[0]["geometry"]["lat"]
+        bot.sendMessage(chat_id,"test is location")
+    if result ==[(0,)]:
+
+        bot.sendMessage(chat_id,"test no location")
+    if command =='Current Weather':
+        conn = sqlite3.connect('main_db.db')
+        cur = conn.cursor()
+        com_sql = "INSERT OR REPLACE INTO commands (user_id, location) VALUES (?, ?)"
+        cur.execute(com_sql, (msg['from']['id'], '1'))
+        conn.commit()
+        bot.sendMessage(chat_id, 'Write your location')
+
     # if geocoder.geocode(command)!=False:
     #     query = command;
     #     result = geocoder.geocode(query)
