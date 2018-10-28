@@ -25,7 +25,7 @@ result = geocoder.geocode(query)
 if result and len(result):
         longitude = result[0]['geometry']['lng']
         latitude  = result[0]["geometry"]["lat"]
-print(longitude,latitude)
+print(latitude,longitude)
 
 def on_chat_message(msg):
     content_type, chat_type, chat_id = telepot.glance(msg)
@@ -55,6 +55,13 @@ def on_chat_message(msg):
     print(result)
     if result == [(1,)]:
         print(command)
+        #deletion of smth in table
+        conn = sqlite3.connect('main_db.db')
+        sql = 'DELETE FROM commands WHERE user_id=?'
+        cur = conn.cursor()
+        cur.execute(sql, (msg['from']['id'],))
+        conn.commit()
+        #end deletion
             # encoding location
         key = 'a279f5ab7cc1464da34cec0183dde7a0'
         geocoder = OpenCageGeocode(key)
@@ -63,20 +70,17 @@ def on_chat_message(msg):
         if result and len(result):
             longitude = result[0]['geometry']['lng']
             latitude  = result[0]["geometry"]["lat"]
-        print(longitude,latitude)
-        conn = sqlite3.connect('main_db.db')
         # end encoding location
             #getting weather
-        # http://api.weatherunlocked.com/api/trigger/49.841952,24.0315921/current temperature gt 16 includecurrent?app_id=f996f51b&app_key=cdfb503fe8f18fe3784de8cdabf67581
-        #end getting weather
-            #deletion of smth in table
-        sql = 'DELETE FROM commands WHERE user_id=?'
-        cur = conn.cursor()
-        cur.execute(sql, (msg['from']['id'],))
-        conn.commit()
-        #end deletion
+        r = requests.get('http://api.weatherunlocked.com/api/trigger/{},{}/current temperature gt 16 includecurrent?app_id=f996f51b&app_key=cdfb503fe8f18fe3784de8cdabf67581'.format(latitude,longitude))
+        print (r.json())
+        Weather = r.json()
+        FinalWeather= Weather['CurrentWeather']['wx_icon']+Weather['CurrentWeather']['wx_desc']+':'+'\n'+'Temparature: '+str(Weather['CurrentWeather']['temp_c'])+'°C'+'\n'+'Feels like: '+str(Weather['CurrentWeather']['feelslike_c'])+'°C'+ '\n'+ 'Humidity: '+str(Weather['CurrentWeather']['humid_pct'])+'%'+'\n'+'Windspeed: '+str(Weather['CurrentWeather']['windspd_ms'])+'m/s'
 
-        bot.sendMessage(chat_id,command)
+        bot.sendMessage(chat_id,FinalWeather,parse_mode='HTML')
+        print(FinalWeather)
+        #end getting weather
+
     if result ==[(0,)]:
 
         bot.sendMessage(chat_id,"test no location")
