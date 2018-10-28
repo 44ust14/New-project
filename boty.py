@@ -39,7 +39,13 @@ def on_chat_message(msg):
     app_id = "f996f51b"
     app_key = "cdfb503fe8f18fe3784de8cdabf67581"
 
-
+    if command =='/Week Weather':
+        arkup = ReplyKeyboardMarkup(keyboard=[
+            [KeyboardButton(text='Current Weather')],
+        [KeyboardButton(text='Week Weather')]
+            ])
+            # bot.sendMessage(chat_id, "", parse_mode='HTML')
+        bot.sendMessage(chat_id, '*Not avaible yet*', reply_markup=markup, parse_mode='Markdown')
     if command == '/start' :
             markup = ReplyKeyboardMarkup(keyboard=[
             [KeyboardButton(text='Current Weather')],
@@ -75,9 +81,14 @@ def on_chat_message(msg):
         r = requests.get('http://api.weatherunlocked.com/api/trigger/{},{}/current temperature gt 16 includecurrent?app_id=f996f51b&app_key=cdfb503fe8f18fe3784de8cdabf67581'.format(latitude,longitude))
         print (r.json())
         Weather = r.json()
-        FinalWeather= Weather['CurrentWeather']['wx_icon']+Weather['CurrentWeather']['wx_desc']+':'+'\n'+'Temparature: '+str(Weather['CurrentWeather']['temp_c'])+'°C'+'\n'+'Feels like: '+str(Weather['CurrentWeather']['feelslike_c'])+'°C'+ '\n'+ 'Humidity: '+str(Weather['CurrentWeather']['humid_pct'])+'%'+'\n'+'Windspeed: '+str(Weather['CurrentWeather']['windspd_ms'])+'m/s'
+        FinalWeather='*'+ Weather['CurrentWeather']['wx_desc']+'*'+':'+'\n'+'🌡️ Temparature: '+str(Weather['CurrentWeather']['temp_c'])+'°C'+'\n'+'🌡️ Feels like: '+str(Weather['CurrentWeather']['feelslike_c'])+'°C'+ '\n'+ '💦 Humidity: '+str(Weather['CurrentWeather']['humid_pct'])+'%'+'\n'+'💨 Windspeed: '+str(Weather['CurrentWeather']['windspd_ms'])+'m/s'+'\n'+'👀 Visibility: '+str(Weather['CurrentWeather']['vis_km'])+'km'
 
-        bot.sendMessage(chat_id,FinalWeather,parse_mode='HTML')
+        # bot.sendMessage(chat_id,FinalWeather,parse_mode='HTML')
+        # bot.sendPhoto(chat_id,'https://techcrunch.com/wp-content/uploads/2017/05/onedrive-illo3.jpg?w=730&crop=1',caption=FinalWeather,parse_mode='MARKDOWN')
+        icon= Weather['CurrentWeather']['wx_icon']
+        final_icon= icon.replace('.gif', '.png') or icon.replace('.png', '.png')
+        print(final_icon)
+        bot.sendPhoto(chat_id,open('icons/{}'.format(final_icon), 'rb'),caption=FinalWeather,parse_mode='MARKDOWN')
         print(FinalWeather)
         #end getting weather
 
