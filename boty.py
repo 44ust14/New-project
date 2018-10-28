@@ -55,21 +55,27 @@ def on_chat_message(msg):
     print(result)
     if result == [(1,)]:
         print(command)
+            # encoding location
+        key = 'a279f5ab7cc1464da34cec0183dde7a0'
+        geocoder = OpenCageGeocode(key)
         query=command
         result = geocoder.geocode(query)
-        # longitude = result[0]['geometry']['lng']
-        # latitude  = result[0]["geometry"]["lat"]
-        # com_sql = "DELETE FROM commands WHERE user_id= 462005869 "
-        # cur.execute(com_sql)
+        if result and len(result):
+            longitude = result[0]['geometry']['lng']
+            latitude  = result[0]["geometry"]["lat"]
+        print(longitude,latitude)
         conn = sqlite3.connect('main_db.db')
-        # cur = conn.cursor()
-        # com_sql = "DELETE FROM commands WHERE user_id= 462005869 "
-        # cur.execute(com_sql)
-        # conn.commit()
+        # end encoding location
+            #getting weather
+        # http://api.weatherunlocked.com/api/trigger/49.841952,24.0315921/current temperature gt 16 includecurrent?app_id=f996f51b&app_key=cdfb503fe8f18fe3784de8cdabf67581
+        #end getting weather
+            #deletion of smth in table
         sql = 'DELETE FROM commands WHERE user_id=?'
         cur = conn.cursor()
         cur.execute(sql, (msg['from']['id'],))
         conn.commit()
+        #end deletion
+
         bot.sendMessage(chat_id,command)
     if result ==[(0,)]:
 
