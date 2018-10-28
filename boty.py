@@ -57,9 +57,20 @@ def on_chat_message(msg):
         print(command)
         query=command
         result = geocoder.geocode(query)
-        longitude = result[0]['geometry']['lng']
-        latitude  = result[0]["geometry"]["lat"]
-        bot.sendMessage(chat_id,"test is location")
+        # longitude = result[0]['geometry']['lng']
+        # latitude  = result[0]["geometry"]["lat"]
+        # com_sql = "DELETE FROM commands WHERE user_id= 462005869 "
+        # cur.execute(com_sql)
+        conn = sqlite3.connect('main_db.db')
+        # cur = conn.cursor()
+        # com_sql = "DELETE FROM commands WHERE user_id= 462005869 "
+        # cur.execute(com_sql)
+        # conn.commit()
+        sql = 'DELETE FROM commands WHERE user_id=?'
+        cur = conn.cursor()
+        cur.execute(sql, (msg['from']['id'],))
+        conn.commit()
+        bot.sendMessage(chat_id,command)
     if result ==[(0,)]:
 
         bot.sendMessage(chat_id,"test no location")
