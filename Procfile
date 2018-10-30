@@ -1,1 +1,1 @@
-worker: python boty.py
+web gunicorn manage:boty.py
