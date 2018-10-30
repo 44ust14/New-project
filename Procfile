@@ -1,1 +1,1 @@
-web: python :skyscaner
+web: python boty.py
