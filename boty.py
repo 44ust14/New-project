@@ -52,7 +52,7 @@ def on_chat_message(msg):
         conn = sqlite3.connect('main_db.db')
         cur = conn.cursor()
         com_sql = "INSERT OR REPLACE INTO commands (user_id, location) VALUES (?, ?)"
-        cur.execute(com_sql, (msg['from']['id'], '2'))
+        cur.execute(com_sql, (msg['from']['id'], '5'))
         conn.commit()
         bot.sendMessage(chat_id, 'Напиши своє місцезназодження')
     if command == '/start' :
@@ -177,7 +177,7 @@ def on_chat_message(msg):
     cur = conn.cursor()
     # cur.execute("SELECT EXISTS(SELECT * FROM commands WHERE user_id=msg['from']['id'])")
     print(msg['from']['id'])
-    cur.execute("SELECT EXISTS(SELECT user_id,location FROM commands WHERE user_id={} and location='7')".format(msg['from']['id']))
+    cur.execute("SELECT EXISTS(SELECT user_id,location FROM commands WHERE user_id={} and location='5')".format(msg['from']['id']))
     result3 = cur.fetchall()
     print('Week' +str(result3))
     if result3 == [(1,)] and command!='/start' and command!='Поточна Погода' and command!='Тижнева Погода' and command!='Погода на завтра':
