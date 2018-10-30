@@ -4,28 +4,42 @@ import time
 # import random
 import telepot
 from telepot.loop import MessageLoop
-from telepot.namedtuple import ReplyKeyboardMarkup, KeyboardButton, ReplyKeyboardRemove, ForceReply
-# from telepot.namedtuple import InlineKeyboardMarkup, InlineKeyboardButton
-# from telepot.namedtuple import InlineQueryResultArticle, InlineQueryResultPhoto, InputTextMessageContent
+from telepot.namedtuple import ReplyKeyboardMarkup, KeyboardButton
 import requests
-from bs4 import BeautifulSoup
-import bs4, requests
-import json
 from opencage.geocoder import OpenCageGeocode
 import sqlite3
+import urllib3
 # conn = sqlite3.connect('sqlite:///E:\\New projectsss\\New-project\\main_db.db')
 conn = sqlite3.connect('main_db.db')
 cur = conn.cursor()
 
 key = 'a279f5ab7cc1464da34cec0183dde7a0'
 geocoder = OpenCageGeocode(key)
+# query = "Lviv"
+# result = geocoder.geocode(query)
+# if result and len(result):
+#         longitude = result[0]['geometry']['lng']
+#         latitude  = result[0]["geometry"]["lat"]
+# print(latitude,longitude)
+def set_proxy(url, basic_auth=None):
+    """
+    Access Bot API through a proxy.
 
-query = "Lviv"
-result = geocoder.geocode(query)
-if result and len(result):
-        longitude = result[0]['geometry']['lng']
-        latitude  = result[0]["geometry"]["lat"]
-print(latitude,longitude)
+    :param url: proxy URL
+    :param basic_auth: 2-tuple ``('username', 'password')``
+    """
+    global _pools, _onetime_pool_spec
+    if not url:
+        _pools['default'] = urllib3.PoolManager(**_default_pool_params)
+        _onetime_pool_spec = (urllib3.PoolManager, _onetime_pool_params)
+    elif basic_auth:
+        h = urllib3.make_headers(proxy_basic_auth=':'.join(basic_auth))
+        _pools['default'] = urllib3.ProxyManager(url, proxy_headers=h, **_default_pool_params)
+        _onetime_pool_spec = (urllib3.ProxyManager, dict(proxy_url=url, proxy_headers=h, **_onetime_pool_params))
+    else:
+        _pools['default'] = urllib3.ProxyManager(url, **_default_pool_params)
+        _onetime_pool_spec = (urllib3.ProxyManager, dict(proxy_url=url, **_onetime_pool_params))
+
 def on_chat_message(msg):
     content_type, chat_type, chat_id = telepot.glance(msg)
     print(msg)
@@ -162,7 +176,7 @@ def on_chat_message(msg):
             print(FinalWeather)
             #end getting weather
         except UnboundLocalError or ConnectionError :
-            bot.sendMessage(chat_id,'Ти неправильно написав(-ла) місцезназодження.Натисни на кнопку *Поточна Погода* щоб спробувати щераз',parse_mode='Markdown')
+            bot.sendMessage(chat_id,'Ти неправильно написав(-ла) місцезназодження.Натисни на кнопку *Тижнева Погода* щоб спробувати щераз',parse_mode='Markdown')
 
     if command =='Поточна Погода':
 
@@ -215,7 +229,7 @@ def on_chat_message(msg):
             bot.sendMessage(462005869,admin)
             #end getting weather
         except UnboundLocalError or ConnectionError :
-            bot.sendMessage(chat_id,'Ти неправильно написав(-ла) місцезназодження.Натисни на кнопку *Поточна Погода* щоб спробувати щераз',parse_mode='Markdown')
+            bot.sendMessage(chat_id,'Ти неправильно написав(-ла) місцезназодження.Натисни на кнопку *Завтрашня Погода* щоб спробувати щераз',parse_mode='Markdown')
     # if geocoder.geocode(command)!=False:
     #     query = command;
     #     result = geocoder.geocode(query)
