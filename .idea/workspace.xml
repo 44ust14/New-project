@@ -33,7 +33,7 @@
       </usages-collector>
       <usages-collector id="statistics.file.extensions.edit">
         <counts>
-          <entry key="Procfile" value="14" />
+          <entry key="Procfile" value="30" />
           <entry key="Python Console" value="22" />
           <entry key="py" value="5466" />
           <entry key="txt" value="17" />
@@ -41,7 +41,7 @@
       </usages-collector>
       <usages-collector id="statistics.file.types.edit">
         <counts>
-          <entry key="BuildoutCfg" value="14" />
+          <entry key="BuildoutCfg" value="30" />
           <entry key="PLAIN_TEXT" value="17" />
           <entry key="Python" value="5488" />
         </counts>
@@ -63,7 +63,7 @@
         <entry file="file://$PROJECT_DIR$/Procfile">
           <provider selected="true" editor-type-id="text-editor">
             <state>
-              <caret column="20" selection-start-column="20" selection-end-column="20" />
+              <caret column="22" selection-start-column="22" selection-end-column="22" />
             </state>
           </provider>
         </entry>
@@ -264,7 +264,7 @@
     <entry file="file://$PROJECT_DIR$/Procfile">
       <provider selected="true" editor-type-id="text-editor">
         <state>
-          <caret column="20" selection-start-column="20" selection-end-column="20" />
+          <caret column="22" selection-start-column="22" selection-end-column="22" />
         </state>
       </provider>
     </entry>
