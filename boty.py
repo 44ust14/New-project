@@ -82,6 +82,7 @@ def on_chat_message(msg):
             if result and len(result):
                 longitude = result[0]['geometry']['lng']
                 latitude  = result[0]["geometry"]["lat"]
+                
             # end encoding location
                 #getting weather
             r = requests.get('http://api.weatherunlocked.com/api/trigger/{},{}/current temperature gt 16 includecurrent?app_id=f996f51b&app_key=cdfb503fe8f18fe3784de8cdabf67581'.format(latitude,longitude))
